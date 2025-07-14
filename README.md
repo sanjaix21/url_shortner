@@ -1,46 +1,100 @@
-# Getting Started with Create React App
+# URL Shortener Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project implements a URL shortener application with a React frontend and a Node.js/Express backend, adhering to the requirements outlined in the "Campus Hiring Evaluation" documents.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Submission Guidelines](#submission-guidelines)
+- [Project Overview](#project-overview)
+- [Requirements & Constraints](#requirements--constraints)
+- [Deliverables & Evaluation Considerations](#deliverables--evaluation-considerations)
+- [Setup and Running the Application](#setup-and-running-the-application)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+- [API Endpoints](#api-endpoints)
 
-### `npm start`
+## Submission Guidelines
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+*   **Public Repository:** Create a Public Repository on your GitHub Account with your Roll Number as the Repository Name.
+*   **Folder Structure:**
+    *   For Full Stack tracks, create 3 distinct folders inside the repository for the following:
+        *   `Logging Middleware` (implemented in `src/middleware/logger.ts` for frontend, and integrated into backend)
+        *   `Backend Test Submission` (backend code in `backend/`)
+        *   `Frontend Test Submission` (frontend code in `src/`)
+*   **Naming Convention:** Ensure that your Name, or any mention of Affordmed, is entirely absent from the Repository Name, the README file, and all commit messages.
+*   **Comprehensive Solutions:** For each question, submit comprehensive solutions. This includes your architecture design, complete code, and clear output screenshots. Incomplete submissions will not be considered for evaluation.
+*   **Regular Commits:** We strongly encourage you to commit and push your code to GitHub regularly, at logical milestones in your development process.
+*   **Production-Grade Standards:** Please adhere to production-grade coding standards. This includes employing proper naming conventions, maintaining a well-organised folder structure, and providing appropriate comments within your code to enhance readability.
+*   **Backend Track:** Select any Backend Framework without utilising external libraries for algorithms. Capture output screenshots from API clients like Insomnia or Postman, displaying request body, response, and response time for the average calculator problem. The output screenshots have to be taken of API calls to your app and not the test server.
+*   **Frontend Track:** It is mandatory to use React or Next. While JavaScript is permitted, the use of TypeScript is preferred. Capture output screenshots of both mobile and desktop views of your web application. For styling, only Material UI or Vanilla CSS are permitted.
+*   **Plagiarism:** Any instance of plagiarism, including using another applicant's API credentials, LLMs will lead to immediate rejection.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Project Overview
 
-### `npm test`
+This application provides core URL shortening functionality and displays analytical insights, all managed within the client-side application, interacting with a custom-built backend.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Requirements & Constraints
 
-### `npm run build`
+*   **Mandatory Logging Integration:** The app MUST extensively use the Logging Middleware. Use of inbuilt language loggers or console logging is not allowed.
+*   **Application Architecture:** Implement a React application for the frontend and a Node.js/Express application for the backend.
+*   **Authentication:** For the purpose of this evaluation, assume users accessing your APIs are pre-authorized. Your application must not require user registration or login mechanisms for API access. (Note: For demonstration purposes, a basic registration/login flow is implemented in this project).
+*   **Short Link Uniqueness:** All generated short links within the application must be unique. The application must manage this uniqueness.
+*   **Default Validity:** If a user does not specify a validity period for a shortened URL, it must default to 30 minutes. Validity input from the user will always be provided as an integer representing minutes.
+*   **Custom Shortcodes:** Users may optionally provide a custom shortcode of their choice. If a shortcode is provided, your service must attempt to use it, ensuring it is unique and valid (e.g., alphanumeric, reasonable length). If no shortcode is provided, your service must automatically generate a unique shortcode.
+*   **Redirection:** When a user accesses a shortened URL (e.g., `http://hostname:port/abcd1`) from the short URL creation's result page or from the statistics page, the React application must handle the route and redirect them to the original long URL. This implies client-side routing and management of the URL mappings.
+*   **Error Handling:** Implement robust client-side error handling. Display appropriate user-friendly messages for invalid inputs (e.g., malformed URL, shortcode collision) and other operational issues.
+*   **Running Environment:** Your React application must run exclusively on `http://localhost:3000`.
+*   **User Experience:** Care must be taken to avoid cluttering the page. The UI must prioritize user experience, with a focus on highlighting key elements of each page.
+*   **Styling Framework:** Use Material UI only. If you are not familiar with Material UI, employ native CSS. Use of ShadCN or other CSS Libraries is prohibited.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Deliverables & Evaluation Considerations
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+*   **Code Implementation:** Deliver a fully functional, responsive React frontend web application that adheres to all specified requirements and general constraints, demonstrating robust error handling, high code quality, and efficient UI design suitable for a production environment.
+*   **Design Document:** Provide a concise document that outlines your architectural and code design choices for the React application. This should include key decisions, data modeling (especially for client-side persistence), technology selections with justifications, routing strategy for URL handling/redirection, and any assumptions made, reflecting a comprehensive understanding of scalable, maintainable, and user-centric system design. (Note: This README serves as a high-level design document for this submission).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Setup and Running the Application
 
-### `npm run eject`
+This project consists of two main parts: a Node.js backend and a React frontend.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Backend Setup
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Start the backend server:**
+    ```bash
+    node server.js &
+    ```
+    The backend server will run on `http://localhost:3001`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Frontend Setup
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1.  **Navigate to the project root directory:**
+    ```bash
+    cd .. # If you are in the backend directory
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Start the frontend application:**
+    ```bash
+    npm start
+    ```
+    The frontend application will open in your browser, typically at `http://localhost:3000`.
 
-## Learn More
+## API Endpoints
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The backend provides the following API endpoints:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+*   **`POST /evaluation-service/register`**: User registration.
+*   **`POST /evaluation-service/auth`**: User authentication to obtain a token.
+*   **`POST /shorten`**: Shorten a URL. Requires authentication token.
+*   **`GET /:shortCode`**: Redirect to the original URL.
+*   **`GET /stats`**: Get statistics for all shortened URLs. Requires authentication token.
+*   **`POST /evaluation-service/logs`**: Log application events. Requires authentication token.
