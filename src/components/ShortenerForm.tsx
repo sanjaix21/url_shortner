@@ -165,7 +165,7 @@ const ShortenerForm: React.FC<{ token: string }> = ({ token }) => {
           {results.map((res, idx) => (
             <Box key={idx} sx={{ mb: 1, p: 1, border: '1px solid #eee', borderRadius: '4px' }}>
               <Typography variant="body1">Original: {res.originalUrl}</Typography>
-              <Typography variant="body1">Short URL: <a href={res.shortUrl} target="_blank" rel="noopener noreferrer">{res.shortUrl}</a></Typography>
+              <Typography variant="body1">Short URL: <a href={`${process.env.REACT_APP_DOMAIN}/s/${res.shortCode}`} target="_blank" rel="noopener noreferrer">{`${process.env.REACT_APP_DOMAIN}/s/${res.shortCode}`}</a></Typography>
               <Typography variant="body2" color="text.secondary">Expires: {new Date(res.expiry).toLocaleString()}</Typography>
             </Box>
           ))}

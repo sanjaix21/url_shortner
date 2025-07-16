@@ -5,6 +5,7 @@ const cors = require('cors'); // Import cors
 
 const app = express();
 const PORT = 3001; // Using a different port for the backend
+const DOMAIN = process.env.DOMAIN || 'http://localhost:3001';
 
 app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
@@ -45,52 +46,38 @@ const verifyToken = (req, res, next) => {
 
 // Registration API
 app.post('/evaluation-service/register', (req, res) => {
-    const { email, name, mobileNo, githubUsername, rollNo, accessCode } = req.body;
+    const { username, password } = req.body;
 
     // Basic validation
-    if (!email || !name || !mobileNo || !githubUsername || !rollNo || !accessCode) {
-        return res.status(400).json({ message: 'All fields are required for registration.' });
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required for registration.' });
     }
 
     // Check if user already exists
-    if (users.some(user => user.email === email)) {
-        return res.status(409).json({ message: 'User with this email already exists.' });
+    if (users.some(user => user.username === username)) {
+        return res.status(409).json({ message: 'User with this username already exists.' });
     }
 
-    const clientID = `client-${Date.now()}`;
-    const clientSecret = `secret-${Date.now()}`;
-
-    const newUser = { email, name, mobileNo, githubUsername, rollNo, accessCode, clientID, clientSecret };
+    // In a real application, you should hash the password here.
+    const newUser = { username, password };
     users.push(newUser);
 
     console.log('New user registered:', newUser);
     res.status(200).json({
-        email: newUser.email,
-        name: newUser.name,
-        rollNo: newUser.rollNo,
-        accessCode: newUser.accessCode,
-        clientID: newUser.clientID,
-        clientSecret: newUser.clientSecret
+        message: 'Registration successful! Please log in.'
     });
 });
 
 // Authentication API
 app.post('/evaluation-service/auth', (req, res) => {
-    const { email, name, rollNo, accessCode, clientID, clientSecret } = req.body;
+    const { username, password } = req.body;
 
     // Basic validation
-    if (!email || !name || !rollNo || !accessCode || !clientID || !clientSecret) {
-        return res.status(400).json({ message: 'All authentication fields are required.' });
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required.' });
     }
 
-    const user = users.find(u =>
-        u.email === email &&
-        u.name === name &&
-        u.rollNo === rollNo &&
-        u.accessCode === accessCode &&
-        u.clientID === clientID &&
-        u.clientSecret === clientSecret
-    );
+    const user = users.find(u => u.username === username && u.password === password);
 
     if (!user) {
         return res.status(401).json({ message: 'Invalid credentials.' });
@@ -98,7 +85,7 @@ app.post('/evaluation-service/auth', (req, res) => {
 
     // In a real application, you would generate a proper JWT token here.
     // For this example, we'll just return a dummy token.
-    const dummyToken = `dummy_jwt_token_for_${user.email}_${Date.now()}`;
+    const dummyToken = `dummy_jwt_token_for_${user.username}_${Date.now()}`;
     const expiresIn = 3600; // 1 hour
 
     res.status(200).json({
@@ -136,14 +123,14 @@ app.post('/shorten', verifyToken, (req, res) => {
 
     res.status(200).json({
         originalUrl,
-        shortUrl: `http://localhost:${PORT}/${shortCode}`,
+        shortUrl: `${DOMAIN}/s/${shortCode}`,
         expiry: expiry.toISOString(),
         shortCode,
     });
 });
 
 // Redirection API
-app.get('/:shortCode', (req, res) => {
+app.get('/s/:shortCode', (req, res) => {
     const { shortCode } = req.params;
     const urlEntry = urls[shortCode];
 

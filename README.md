@@ -56,6 +56,16 @@ This application provides core URL shortening functionality and displays analyti
 
 This project consists of two main parts: a Node.js backend and a React frontend.
 
+### Configuration
+
+You can configure the domain for the shortened URLs by creating a `.env` file in the root of the project and setting the `REACT_APP_DOMAIN` variable. For the backend, you can set the `DOMAIN` environment variable.
+
+**Example `.env` file:**
+
+```
+REACT_APP_DOMAIN=http://your-domain.com
+```
+
 ### Backend Setup
 
 1.  **Navigate to the backend directory:**
@@ -95,6 +105,6 @@ The backend provides the following API endpoints:
 *   **`POST /evaluation-service/register`**: User registration.
 *   **`POST /evaluation-service/auth`**: User authentication to obtain a token.
 *   **`POST /shorten`**: Shorten a URL. Requires authentication token.
-*   **`GET /:shortCode`**: Redirect to the original URL.
+*   **`GET /s/:shortCode`**: Redirect to the original URL.
 *   **`GET /stats`**: Get statistics for all shortened URLs. Requires authentication token.
 *   **`POST /evaluation-service/logs`**: Log application events. Requires authentication token.

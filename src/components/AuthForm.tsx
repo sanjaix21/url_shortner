@@ -8,14 +8,8 @@ interface AuthFormProps {
 
 const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
   const [isRegister, setIsRegister] = useState(false);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [githubUsername, setGithubUsername] = useState('');
-  const [rollNo, setRollNo] = useState('');
-  const [accessCode, setAccessCode] = useState('');
-  const [clientID, setClientID] = useState('');
-  const [clientSecret, setClientSecret] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -23,9 +17,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
     setMessage(null);
 
     const url = isRegister ? 'http://localhost:3001/evaluation-service/register' : 'http://localhost:3001/evaluation-service/auth';
-    const body = isRegister
-      ? { email, name, mobileNo, githubUsername, rollNo, accessCode }
-      : { email, name, rollNo, accessCode, clientID, clientSecret };
+    const body = { username, password };
 
     try {
       const response = await fetch(url, {
@@ -43,9 +35,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
         if (!isRegister) {
           onLoginSuccess(data.access_token);
         } else {
-          // If registration is successful, pre-fill clientID and clientSecret for login
-          setClientID(data.clientID);
-          setClientSecret(data.clientSecret);
           setIsRegister(false); // Switch to login form
         }
       } else {
@@ -66,78 +55,22 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
         {message && <Alert severity={message.type} sx={{ mb: 2 }}>{message.text}</Alert>}
         <form onSubmit={handleSubmit}>
           <TextField
-            label="Email"
-            type="email"
+            label="Username"
             fullWidth
             margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <TextField
-            label="Name"
+            label="Password"
+            type="password"
             fullWidth
             margin="normal"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <TextField
-            label="Roll No"
-            fullWidth
-            margin="normal"
-            value={rollNo}
-            onChange={(e) => setRollNo(e.target.value)}
-            required
-          />
-          <TextField
-            label="Access Code"
-            fullWidth
-            margin="normal"
-            value={accessCode}
-            onChange={(e) => setAccessCode(e.target.value)}
-            required
-          />
-          {isRegister && (
-            <>
-              <TextField
-                label="Mobile No"
-                fullWidth
-                margin="normal"
-                value={mobileNo}
-                onChange={(e) => setMobileNo(e.target.value)}
-                required
-              />
-              <TextField
-                label="GitHub Username"
-                fullWidth
-                margin="normal"
-                value={githubUsername}
-                onChange={(e) => setGithubUsername(e.target.value)}
-                required
-              />
-            </>
-          )}
-          {!isRegister && (
-            <>
-              <TextField
-                label="Client ID"
-                fullWidth
-                margin="normal"
-                value={clientID}
-                onChange={(e) => setClientID(e.target.value)}
-                required
-              />
-              <TextField
-                label="Client Secret"
-                fullWidth
-                margin="normal"
-                value={clientSecret}
-                onChange={(e) => setClientSecret(e.target.value)}
-                required
-              />
-            </>
-          )}
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
             {isRegister ? 'Register' : 'Login'}
           </Button>
